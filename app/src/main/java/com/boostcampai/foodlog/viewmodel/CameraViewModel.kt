@@ -1,6 +1,33 @@
 package com.boostcampai.foodlog.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.boostcampai.foodlog.network.InferenceResponse
+import com.boostcampai.foodlog.repository.CameraRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CameraViewModel : ViewModel() {
+@HiltViewModel
+class CameraViewModel @Inject constructor(
+    private val cameraRepository: CameraRepository
+) : ViewModel() {
+    private var _inferenceResult = MutableLiveData<InferenceResponse>()
+    val inferenceResult: LiveData<InferenceResponse> = _inferenceResult
+
+    fun inferenceResult() {
+        CoroutineScope(Dispatchers.IO).launch {
+            cameraRepository.getImageInference()
+                .onSuccess {
+                    viewModelScope.launch { _inferenceResult.value = it }
+                }.onFailure {
+                    Log.d("getImageInferenceResult", "Failure")
+                }
+        }
+    }
 }

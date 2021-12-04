@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.databinding.FragmentCameraBinding
 import com.boostcampai.foodlog.viewmodel.CameraViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CameraFragment : Fragment() {
 
     private lateinit var binding: FragmentCameraBinding
@@ -27,6 +29,14 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+
+        viewModel.inferenceResult.observe(viewLifecycleOwner, {
+            binding.tvTest.text = it.toString()
+        })
+
+        binding.btnTest.setOnClickListener {
+            viewModel.inferenceResult()
+        }
     }
 
 }

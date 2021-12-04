@@ -16,6 +16,10 @@ buildscript {
     }
 }
 
+subprojects {
+    apply plugin: 'dagger.hilt.android.plugin'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
