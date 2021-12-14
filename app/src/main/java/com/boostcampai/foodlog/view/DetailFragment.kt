@@ -12,7 +12,6 @@ import com.boostcampai.foodlog.adapter.DetailDietRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentDetailBinding
 import com.boostcampai.foodlog.model.DailyDietModel
 import com.boostcampai.foodlog.model.Food
-import com.boostcampai.foodlog.model.Nutrition
 import com.boostcampai.foodlog.model.Position
 import com.boostcampai.foodlog.viewmodel.DetailViewModel
 
@@ -41,13 +40,15 @@ class DetailFragment : Fragment() {
                     "12월 14일",
                     3200,
                     listOf(
-                        Food(0, 0, 0, "김치찌개",
+                        Food(
+                            "김치찌개", 0,
                             Position(0f, 0f, 0f, 0f),
-                            Nutrition("kcal", 170f)
+                            100f, 10f, 5f, 3f, 0, 0,
                         ),
-                        Food(0, 0, 0, "꽁치조림",
+                        Food(
+                            "꽁치조림", 0,
                             Position(0f, 0f, 0f, 0f),
-                            Nutrition("kcal", 300f)
+                            100f, 10f, 5f, 3f, 0, 0
                         )
                     )
                 )

@@ -2,7 +2,6 @@ package com.boostcampai.foodlog.data
 
 import androidx.room.TypeConverter
 import com.boostcampai.foodlog.model.Food
-import com.boostcampai.foodlog.model.Nutrition
 import com.boostcampai.foodlog.model.Position
 import com.google.gson.Gson
 
@@ -12,12 +11,6 @@ class Converter {
 
     @TypeConverter
     fun jsonToFood(str: String): Food = Gson().fromJson(str, Food::class.java)
-
-    @TypeConverter
-    fun nutritionToJson(nutrition: Nutrition): String = Gson().toJson(nutrition)
-
-    @TypeConverter
-    fun jsonToNutrition(str: String): Nutrition = Gson().fromJson(str, Nutrition::class.java)
 
     @TypeConverter
     fun positionToJson(pos: Position): String = Gson().toJson(pos)

@@ -37,6 +37,10 @@ class CameraFragment : Fragment() {
         binding.btnTest.setOnClickListener {
             viewModel.inferenceResult()
         }
+
+        binding.btnSave.setOnClickListener {
+            viewModel.saveResult()
+        }
     }
 
 }

@@ -5,11 +5,14 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Food")
 data class Food(
+    var name: String,
+    var cls: Int,
+    var pos: Position,
+    var kcal: Float,
+    var dan: Float,
+    var zi: Float,
+    var tan: Float,
+    var imgId: Long,
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
-    var imgId: Long,
-    var cls: Int,
-    var name: String,
-    var pos: Position,
-    var nutrition: Nutrition
 )

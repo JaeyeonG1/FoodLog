@@ -23,15 +23,15 @@ data class FoodResponse(
     @SerializedName("name")
     val name: String = "",
     @SerializedName("cls")
-    val cls: String = "",
+    val cls: Int = 0,
     @SerializedName("pos")
     val pos: List<Float> = listOf(),
     @SerializedName("kcal")
-    val kcal: Int = 0,
+    val kcal: Float = 0f,
     @SerializedName("단백질")
-    val dan: Double = 0.0,
+    val dan: Float = 0f,
     @SerializedName("지방")
-    val zi: Double = 0.0,
+    val zi: Float = 0f,
     @SerializedName("탄수화물")
-    val tan: Double = 0.0
+    val tan: Float = 0f
 ) : Parcelable
