@@ -20,10 +20,20 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="Run"
-            app:layout_constraintBottom_toTopOf="@id/tv_test"
+            app:layout_constraintBottom_toTopOf="@id/btn_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Save"
+            app:layout_constraintBottom_toTopOf="@id/tv_test"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_test" />
 
         <TextView
             android:id="@+id/tv_test"
@@ -32,7 +42,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_test" />
+            app:layout_constraintTop_toBottomOf="@id/btn_save" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

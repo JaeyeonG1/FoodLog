@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Diet")
 data class Diet(
     @PrimaryKey(autoGenerate = true)
-    var id: Long,
-    var url: String,
-    var date: String
+    var id: Long = 0,
+    var uri: String,
+    var dateTime: String
 )

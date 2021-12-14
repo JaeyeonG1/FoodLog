@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Food")
 data class Food(
     @PrimaryKey(autoGenerate = true)
-    var id: Long,
+    var id: Long = 0,
     var imgId: Long,
     var cls: Int,
     var name: String,

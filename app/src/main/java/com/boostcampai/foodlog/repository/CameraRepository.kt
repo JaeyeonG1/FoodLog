@@ -12,8 +12,8 @@ import javax.inject.Singleton
 @Singleton
 class CameraRepository @Inject constructor(
     @RemoteSource val inferenceSource: InferenceSource,
-    private val dietDao: DietDao,
-    private val foodDao: FoodDao
+    val dietDao: DietDao,
+    val foodDao: FoodDao
 ) {
     suspend fun getImageInference(): Result<InferenceResponse> =
         withContext(Dispatchers.IO) { inferenceSource.getInferenceResponse() }

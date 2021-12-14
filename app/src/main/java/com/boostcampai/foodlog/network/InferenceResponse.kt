@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class InferenceResponse(
     @SerializedName("Diet")
-    val Diet: DietResponse = DietResponse()
+    val diet: DietResponse = DietResponse()
 ) : Parcelable
 
 @Parcelize
@@ -16,7 +16,7 @@ data class DietResponse(
     val date: String = "",
     @SerializedName("foods")
     val foods: List<FoodResponse> = listOf()
-):Parcelable
+) : Parcelable
 
 @Parcelize
 data class FoodResponse(
@@ -32,6 +32,6 @@ data class FoodResponse(
     val dan: Double = 0.0,
     @SerializedName("지방")
     val zi: Double = 0.0,
-    @SerializedName("탄수화뭃")
+    @SerializedName("탄수화물")
     val tan: Double = 0.0
-):Parcelable
+) : Parcelable
