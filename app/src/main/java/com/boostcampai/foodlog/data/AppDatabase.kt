@@ -9,7 +9,7 @@ import com.boostcampai.foodlog.data.dao.FoodDao
 import com.boostcampai.foodlog.model.Diet
 import com.boostcampai.foodlog.model.Food
 
-@Database(entities = [Diet::class, Food::class], version = 1)
+@Database(entities = [Diet::class, Food::class], version = 1, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun dietDao(): DietDao
