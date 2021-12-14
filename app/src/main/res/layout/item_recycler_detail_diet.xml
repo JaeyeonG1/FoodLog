@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_margin="14dp"
-                    android:text="@{item.getNutritionSumString()}"
+                    android:text="320kcal"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"

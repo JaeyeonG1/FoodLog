@@ -5,6 +5,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Nutrition(
-    var unit:String,
-    var value:Float
-) : Parcelable
+    var unit: String,
+    var value: Float
+) : Parcelable {
+    fun toValueString(): String {
+        return value.toString() + unit
+    }
+}
