@@ -14,9 +14,10 @@ import com.boostcampai.foodlog.model.Food
 import com.boostcampai.foodlog.model.Position
 import com.boostcampai.foodlog.model.TodayDietModel
 import com.boostcampai.foodlog.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
-
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
 
@@ -26,6 +27,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding.lifecycleOwner = this
 
         return binding.root
     }
