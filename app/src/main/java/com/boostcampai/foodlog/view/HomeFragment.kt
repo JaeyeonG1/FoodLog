@@ -10,9 +10,6 @@ import androidx.fragment.app.viewModels
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.adapter.HomeDietRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentHomeBinding
-import com.boostcampai.foodlog.model.Food
-import com.boostcampai.foodlog.model.Position
-import com.boostcampai.foodlog.model.TodayDietModel
 import com.boostcampai.foodlog.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +24,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
@@ -38,39 +35,10 @@ class HomeFragment : Fragment() {
 
         val adapter = HomeDietRecyclerAdapter()
         binding.rvDiet.adapter = adapter
-        adapter.submitList(
-            mutableListOf(
-                TodayDietModel(
-                    "07:20",
-                    listOf(
-                        Food(
-                            "김치찌개", 0,
-                            Position(0f, 0f, 0f, 0f),
-                            100f, 10f, 5f, 3f, 0, 0,
-                        ),
-                        Food(
-                            "꽁치조림", 0,
-                            Position(0f, 0f, 0f, 0f),
-                            100f, 10f, 5f, 3f, 0, 0
-                        )
-                    )
-                ),
-                TodayDietModel(
-                    "12:30",
-                    listOf(
-                        Food(
-                            "된장찌개", 0,
-                            Position(0f, 0f, 0f, 0f),
-                            100f, 10f, 5f, 3f, 0, 0,
-                        ),
-                        Food(
-                            "갈비찜", 0,
-                            Position(0f, 0f, 0f, 0f),
-                            100f, 10f, 5f, 3f, 0, 0
-                        )
-                    )
-                )
-            )
-        )
+
+        viewModel.dietWithFoods.observe(viewLifecycleOwner, {})
+        viewModel.todayDietModels.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+        })
     }
 }
