@@ -3,6 +3,7 @@ package com.boostcampai.foodlog.model
 data class DailyDietModel(
     var date:String,
     var goal:Int,
+    var unit:String,
     var foods:List<Food>,
 ){
     fun foodsToString():String{

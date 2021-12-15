@@ -12,11 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.adapter.DetailDietRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentDetailBinding
-import com.boostcampai.foodlog.model.DailyDietModel
-import com.boostcampai.foodlog.model.Food
-import com.boostcampai.foodlog.model.Position
 import com.boostcampai.foodlog.viewmodel.DetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
@@ -28,12 +27,14 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         navController = findNavController()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.viewModel = viewModel
 
         val adapter = DetailDietRecyclerAdapter {
@@ -41,28 +42,12 @@ class DetailFragment : Fragment() {
             navController.navigate(action)
 
         }
-
         binding.rvDetail.adapter = adapter
-        adapter.submitList(
-            mutableListOf(
-                DailyDietModel(
-                    "12월 14일",
-                    3200,
-                    listOf(
-                        Food(
-                            "김치찌개", 0,
-                            Position(0f, 0f, 0f, 0f),
-                            100f, 10f, 5f, 3f, 0, 0,
-                        ),
-                        Food(
-                            "꽁치조림", 0,
-                            Position(0f, 0f, 0f, 0f),
-                            100f, 10f, 5f, 3f, 0, 0
-                        )
-                    )
-                )
-            )
-        )
+
+        viewModel.dietWithFoods.observe(viewLifecycleOwner, {})
+        viewModel.dailyDietModels.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+        })
 
     }
 

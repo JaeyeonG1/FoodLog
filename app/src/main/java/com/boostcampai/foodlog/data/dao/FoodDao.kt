@@ -14,6 +14,9 @@ abstract class FoodDao : BaseDao<Food> {
     @Transaction
     @Query("SELECT * FROM Diet WHERE dateTime LIKE '%'||:date||'%' ORDER BY dateTime")
     abstract fun loadDietWithFoodsByDateTime(date: String): LiveData<List<DietWithFoods>>
+
+    @Query("SELECT * FROM Diet ORDER BY dateTime desc")
+    abstract fun loadDietWithFoods() : LiveData<List<DietWithFoods>>
 }
 
 data class DietWithFoods(

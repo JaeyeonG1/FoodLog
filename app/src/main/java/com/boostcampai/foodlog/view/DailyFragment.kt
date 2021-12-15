@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.adapter.DailyFoodRecyclerAdapter
+import com.boostcampai.foodlog.adapter.DetailDietRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentDailyBinding
+import com.boostcampai.foodlog.model.DailyDietModel
 import com.boostcampai.foodlog.viewmodel.DailyViewModel
 
 class DailyFragment : Fragment() {
@@ -23,6 +25,8 @@ class DailyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_daily, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+
         return binding.root
     }
 
@@ -31,7 +35,7 @@ class DailyFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        val adapter = DailyFoodRecyclerAdapter()
+        val adapter = DetailDietRecyclerAdapter({})
         binding.rvDaily.adapter = adapter
 
     }
