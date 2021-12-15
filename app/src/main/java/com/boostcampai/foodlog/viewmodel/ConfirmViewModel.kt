@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CameraViewModel @Inject constructor(
+class ConfirmViewModel @Inject constructor(
     private val cameraRepository: CameraRepository
 ) : ViewModel() {
     private var _inferenceResult = MutableLiveData<InferenceResponse>()

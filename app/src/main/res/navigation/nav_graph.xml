@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.boostcampai.foodlog.view.CameraFragment"
+        android:name="com.boostcampai.foodlog.view.ConfirmFragment"
         android:label="PhotoFragment" />
 
     <fragment

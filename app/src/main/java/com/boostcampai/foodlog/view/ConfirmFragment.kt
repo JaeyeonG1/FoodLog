@@ -8,21 +8,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.boostcampai.foodlog.R
-import com.boostcampai.foodlog.databinding.FragmentCameraBinding
-import com.boostcampai.foodlog.viewmodel.CameraViewModel
+import com.boostcampai.foodlog.databinding.FragmentConfirmBinding
+import com.boostcampai.foodlog.viewmodel.ConfirmViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CameraFragment : Fragment() {
+class ConfirmFragment : Fragment() {
 
-    private lateinit var binding: FragmentCameraBinding
-    private val viewModel: CameraViewModel by viewModels()
+    private lateinit var binding: FragmentConfirmBinding
+    private val viewModel: ConfirmViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_confirm, container, false)
         return binding.root
     }
 
