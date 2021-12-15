@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:gravity="end"
-                    android:text="@{viewModel.getBadge()}"
+                    android:text="@{viewModel.goalBadge()}"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/tv_today_value_main"
