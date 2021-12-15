@@ -17,6 +17,18 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.boostcampai.foodlog.view.DetailFragment"
-        android:label="DetailFragment" />
+        android:label="DetailFragment" >
+        <action
+            android:id="@+id/action_detailFragment_to_dailyFragment"
+            app:destination="@id/dailyFragment"
+            app:enterAnim="@anim/bottom_up"
+            app:exitAnim="@anim/up_bottom"
+            app:popEnterAnim="@anim/bottom_up"
+            app:popExitAnim="@anim/up_bottom"/>
+    </fragment>
+    <fragment
+        android:id="@+id/dailyFragment"
+        android:name="com.boostcampai.foodlog.view.DailyFragment"
+        android:label="DailyFragment" />
 
 </navigation>

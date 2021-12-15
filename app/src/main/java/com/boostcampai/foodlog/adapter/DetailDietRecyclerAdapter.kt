@@ -2,13 +2,13 @@ package com.boostcampai.foodlog.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.boostcampai.foodlog.databinding.ItemRecyclerDetailDietBinding
 import com.boostcampai.foodlog.model.DailyDietModel
 
-class DetailDietRecyclerAdapter :
+class DetailDietRecyclerAdapter(val onClick: () -> Unit) :
     ListAdapter<DailyDietModel, RecyclerView.ViewHolder>(DetailDietDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return DailyDietViewHolder(
@@ -29,8 +29,10 @@ class DetailDietRecyclerAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DailyDietModel) {
             binding.item = item
+            binding.setOnClickListener { onClick() }
         }
     }
+
 }
 
 private class DetailDietDiffUtil : DiffUtil.ItemCallback<DailyDietModel>() {

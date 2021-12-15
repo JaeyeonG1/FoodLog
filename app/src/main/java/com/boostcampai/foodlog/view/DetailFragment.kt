@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.adapter.DetailDietRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentDetailBinding
@@ -19,12 +21,14 @@ class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: DetailViewModel by viewModels()
+    private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
+        navController = findNavController()
         return binding.root
     }
 
@@ -32,7 +36,12 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        val adapter = DetailDietRecyclerAdapter()
+        val adapter = DetailDietRecyclerAdapter {
+            val action = DetailFragmentDirections.actionDetailFragmentToDailyFragment()
+            navController.navigate(action)
+
+        }
+
         binding.rvDetail.adapter = adapter
         adapter.submitList(
             mutableListOf(
@@ -54,6 +63,7 @@ class DetailFragment : Fragment() {
                 )
             )
         )
+
     }
 
 }
