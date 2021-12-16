@@ -2,20 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.boostcampai.foodlog">
 
+    <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name=".FoodLogApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".FoodLogApplication"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.FoodLog">
+        android:theme="@style/Theme.FoodLog"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:exported="true">
