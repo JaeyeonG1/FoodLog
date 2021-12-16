@@ -9,4 +9,7 @@ data class TodayDietModel(
         return str.substring(0, str.length - 2)
     }
 
+    fun sumByUnit(unit: String): Float{
+        return foods.total(unit)
+    }
 }

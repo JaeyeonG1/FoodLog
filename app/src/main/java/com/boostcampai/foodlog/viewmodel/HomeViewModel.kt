@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.boostcampai.foodlog.FoodLogApplication
 import com.boostcampai.foodlog.data.dao.DietWithFoods
 import com.boostcampai.foodlog.model.TodayDietModel
+import com.boostcampai.foodlog.model.total
 import com.boostcampai.foodlog.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,8 +27,9 @@ class HomeViewModel @Inject constructor(
     val todayDietModels: LiveData<List<TodayDietModel>> = _todayDietModels
 
     var date = getCurrentDate()
+    var presentDate = getDate(date)
     var current: MutableLiveData<Int> = MutableLiveData<Int>(0)
-
+//    var current:MutableList<Int> = MutableLiveData<Int>()
     init {
         loadDailyDiets()
     }
@@ -38,11 +40,27 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val temp = homeRepository.loadDiet(date)
             dietWithFoods.addSource(temp) { list ->
-                Log.d("loadDailyDiets", "Changed")
+//                Log.d("loadDailyDiets", "Changed")
                 _todayDietModels.value = list.map {
-                    TodayDietModel(it.diet.dateTime, it.foods)
+                    TodayDietModel(getTime(it.diet.dateTime), it.foods)
                 }
+                current.value = list.map{
+                    it.foods.total(unit.value?:"kcal")
+                }.sum().toInt()
             }
         }
+    }
+
+    private fun getDate(date: String): String {
+        // String form is 'YYYY-MM-DD HH:MM:SS'
+        var temp = date.split(" ")[0].split("-")
+
+        return temp[1] + "월 " + temp[2] + "일"
+    }
+    private fun getTime(date: String): String{
+        // String form is 'YYYY-MM-DD HH:MM:SS'
+        var temp = date.split(" ")[1].split(":")
+
+        return temp[0] + ":" + temp[1]
     }
 }

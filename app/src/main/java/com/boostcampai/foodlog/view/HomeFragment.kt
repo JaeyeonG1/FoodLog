@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.adapter.HomeDietRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentHomeBinding
+import com.boostcampai.foodlog.model.total
 import com.boostcampai.foodlog.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +34,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        val adapter = HomeDietRecyclerAdapter()
+        val adapter = HomeDietRecyclerAdapter(){
+            it.total(viewModel.unit.value?:"kcal").toString() + viewModel.unit.value?:"kcal"
+        }
         binding.rvDiet.adapter = adapter
 
         viewModel.dietWithFoods.observe(viewLifecycleOwner, {})
