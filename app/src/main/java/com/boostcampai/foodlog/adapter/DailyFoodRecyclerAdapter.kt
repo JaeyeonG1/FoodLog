@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.boostcampai.foodlog.databinding.ItemRecyclerDailyFoodBinding
 import com.boostcampai.foodlog.model.DailyFoodModel
+import com.boostcampai.foodlog.model.Food
 
-class DailyFoodRecyclerAdapter :
+class DailyFoodRecyclerAdapter(val calcNutrition: (Food) -> String) :
     ListAdapter<DailyFoodModel, RecyclerView.ViewHolder>(DailyFoodDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return DailyFoodViewHolder(
@@ -29,6 +30,7 @@ class DailyFoodRecyclerAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DailyFoodModel) {
             binding.item = item
+            binding.tvValue.text = calcNutrition(item.food)
         }
     }
 }

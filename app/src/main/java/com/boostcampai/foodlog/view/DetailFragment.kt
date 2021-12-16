@@ -1,6 +1,7 @@
 package com.boostcampai.foodlog.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.adapter.DetailDietRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentDetailBinding
+import com.boostcampai.foodlog.model.total
 import com.boostcampai.foodlog.viewmodel.DetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,11 +39,17 @@ class DetailFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        val adapter = DetailDietRecyclerAdapter {
-            val action = DetailFragmentDirections.actionDetailFragmentToDailyFragment()
-            navController.navigate(action)
+        val adapter = DetailDietRecyclerAdapter(
+            { date ->
+//            Log.d("fragment date", viewModel.loadDietWithFoods(date).toString())
+                val action = DetailFragmentDirections.actionDetailFragmentToDailyFragment(viewModel.loadDietWithFoods(date).toTypedArray())
+                navController.navigate(action)
 
-        }
+            },
+            {
+                it.total(viewModel.unit.value?:"kcal").toString() + viewModel.unit.value?:"kcal"
+            }
+        )
         binding.rvDetail.adapter = adapter
 
         viewModel.dietWithFoods.observe(viewLifecycleOwner, {})

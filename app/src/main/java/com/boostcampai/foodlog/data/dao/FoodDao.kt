@@ -1,5 +1,6 @@
 package com.boostcampai.foodlog.data.dao
 
+import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Embedded
@@ -8,6 +9,7 @@ import androidx.room.Relation
 import androidx.room.Transaction
 import com.boostcampai.foodlog.model.Diet
 import com.boostcampai.foodlog.model.Food
+import kotlinx.parcelize.Parcelize
 
 @Dao
 abstract class FoodDao : BaseDao<Food> {
@@ -18,7 +20,7 @@ abstract class FoodDao : BaseDao<Food> {
     @Query("SELECT * FROM Diet ORDER BY dateTime desc")
     abstract fun loadDietWithFoods() : LiveData<List<DietWithFoods>>
 }
-
+@Parcelize
 data class DietWithFoods(
     @Embedded val diet: Diet,
     @Relation(
@@ -26,4 +28,4 @@ data class DietWithFoods(
         entityColumn = "imgId"
     )
     val foods: List<Food>
-)
+) : Parcelable

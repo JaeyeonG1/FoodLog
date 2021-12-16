@@ -35,7 +35,7 @@
                     android:layout_height="0dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
-                    android:text="@{viewModel.date}"
+                    android:text="@{viewModel.presentDate}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"

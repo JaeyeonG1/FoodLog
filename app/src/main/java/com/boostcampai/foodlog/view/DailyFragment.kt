@@ -13,11 +13,13 @@ import com.boostcampai.foodlog.adapter.DetailDietRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentDailyBinding
 import com.boostcampai.foodlog.model.DailyDietModel
 import com.boostcampai.foodlog.viewmodel.DailyViewModel
+import androidx.navigation.fragment.navArgs
 
 class DailyFragment : Fragment() {
 
     private lateinit var binding: FragmentDailyBinding
     private val viewModel: DailyViewModel by viewModels()
+    private val navArgs: DailyFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,10 +35,16 @@ class DailyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val selectedFoods = navArgs.foods
+
         binding.viewModel = viewModel
 
-        val adapter = DetailDietRecyclerAdapter({})
+        viewModel.initDailyFoods(selectedFoods.toList())
+        val adapter = DailyFoodRecyclerAdapter {
+            it.getValueByUnit(viewModel.unit.value ?: "kcal").toString() + viewModel.unit.value
+        }
         binding.rvDaily.adapter = adapter
+        adapter.submitList(viewModel.dailyFoods)
 
     }
 }

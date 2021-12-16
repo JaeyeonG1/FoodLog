@@ -1,6 +1,7 @@
 package com.boostcampai.foodlog.viewmodel
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.*
 import com.boostcampai.foodlog.FoodLogApplication
 import com.boostcampai.foodlog.data.dao.DietWithFoods
@@ -30,16 +31,25 @@ class DetailViewModel @Inject constructor(
 
     @SuppressLint("NewApi")
     fun getCurrentDate() = LocalDate.now().toString()
+    fun loadDietWithFoods(date: String): List<DietWithFoods>{
+        val list = mutableListOf<DietWithFoods>()
+        dietWithFoods.value?.forEach {
+            if(it.diet.dateTime.contains(date)){
+                list.add(it)
+                Log.d("load", it.toString())
+            }
+        }
+        return list
+    }
 
     private fun loadDailyDiet() {
         viewModelScope.launch {
             dietWithFoods.addSource(dailyRepository.loadDiet()) { list ->
+                dietWithFoods.value = list
                 val map = hashMapOf<String, MutableList<Food>>()
                 list.forEach {
-                    map[it.diet.dateTime.split(" ")[0]].let { foods ->
-                        if (foods != null) {
-                            map[it.diet.dateTime.split(" ")[0]]?.addAll(foods)
-                        }
+                    map[it.diet.dateTime.split(" ")[0]].let { _ ->
+                        map[it.diet.dateTime.split(" ")[0]]?.addAll(it.foods)
                     } ?: run { map[it.diet.dateTime.split(" ")[0]] = it.foods.toMutableList() }
                 }
                 _dailyDietModels.value = map.map {
