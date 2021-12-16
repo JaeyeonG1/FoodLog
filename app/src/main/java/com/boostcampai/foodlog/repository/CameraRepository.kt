@@ -15,6 +15,6 @@ class CameraRepository @Inject constructor(
     val dietDao: DietDao,
     val foodDao: FoodDao
 ) {
-    suspend fun getImageInference(): Result<InferenceResponse> =
-        withContext(Dispatchers.IO) { inferenceSource.getInferenceResponse() }
+    suspend fun getInferenceResult(base64: String, dateTime: String): Result<InferenceResponse> =
+        withContext(Dispatchers.IO) { inferenceSource.getInferenceResponse(base64, dateTime) }
 }

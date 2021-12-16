@@ -11,10 +11,14 @@ import com.boostcampai.foodlog.model.Position
 import com.boostcampai.foodlog.network.FoodResponse
 import com.boostcampai.foodlog.network.InferenceResponse
 import com.boostcampai.foodlog.repository.CameraRepository
+import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,11 +28,14 @@ class ConfirmViewModel @Inject constructor(
     private var _inferenceResult = MutableLiveData<InferenceResponse>()
     val inferenceResult: LiveData<InferenceResponse> = _inferenceResult
 
-    fun inferenceResult() {
+    fun inferenceFromBitmap(base64Str: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            cameraRepository.getImageInference()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+            cameraRepository.getInferenceResult(base64Str, LocalDateTime.now().format(formatter))
                 .onSuccess {
-                    viewModelScope.launch { _inferenceResult.value = it }
+                    viewModelScope.launch {
+                        _inferenceResult.value = it
+                        Log.d("Result", it.toString())}
                 }.onFailure {
                     Log.d("getImageInferenceResult", "Failure")
                 }

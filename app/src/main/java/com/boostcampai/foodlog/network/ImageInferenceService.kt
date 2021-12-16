@@ -3,14 +3,19 @@ package com.boostcampai.foodlog.network
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
+import retrofit2.http.Body
+import retrofit2.http.Headers
+import retrofit2.http.POST
 
 interface ImageInferenceService {
-    @GET("api/v1/inference")
-    fun requestInferenceResult(): Call<InferenceResponse>
+    @Headers("Content-Type: application/json; charset=UTF-8")
+    @POST("api/v1/inference")
+    fun requestInferenceResult(
+        @Body body: HashMap<String, String>
+    ): Call<InferenceResponse>
 
     companion object {
-        private const val apiUrl = "http://49.50.166.29:6011/"
+        private const val apiUrl = "http://192.168.0.61:8000/"
 
         fun create(): ImageInferenceService {
             return Retrofit

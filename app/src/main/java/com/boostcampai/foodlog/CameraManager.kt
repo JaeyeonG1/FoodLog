@@ -1,11 +1,14 @@
 package com.boostcampai.foodlog
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
+import android.view.Surface.ROTATION_0
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -53,8 +56,15 @@ class CameraManager(
     }
 
     private fun buildImageCapture() {
+        val rotation = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            context.display
+        } else {
+            (context as Activity).windowManager.defaultDisplay
+        }?.rotation ?: ROTATION_0
+
         imageCapture = ImageCapture.Builder()
-            .setTargetResolution(Size(metrics.widthPixels, metrics.heightPixels))
+            .setTargetRotation(rotation)
+            .setTargetResolution(Size(cameraView.width, cameraView.height))
             .build()
     }
 
@@ -63,7 +73,9 @@ class CameraManager(
             addListener(
                 {
                     cameraProvider = get()
-                    preview = Preview.Builder().build()
+                    preview = Preview.Builder()
+                        .setTargetResolution(Size(cameraView.width, cameraView.height))
+                        .build()
 
                     val cameraSelector = CameraSelector.Builder()
                         .requireLensFacing(cameraFacingOption)
@@ -89,7 +101,9 @@ class CameraManager(
             ContextCompat.getMainExecutor(context),
             object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
-                    onCapture(image.toBitmap())
+                    Log.d("Rotation", camera.cameraInfo.sensorRotationDegrees.toString())
+
+                    onCapture(image.toBitmap(camera.cameraInfo.sensorRotationDegrees))
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -98,11 +112,20 @@ class CameraManager(
             })
     }
 
-    fun ImageProxy.toBitmap(): Bitmap {
+    fun ImageProxy.toBitmap(rotation: Int): Bitmap {
         val buffer = planes[0].buffer
         buffer.rewind()
         val bytes = ByteArray(buffer.capacity())
         buffer.get(bytes)
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        val source = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        return Bitmap.createBitmap(
+            source,
+            0,
+            0,
+            source.width,
+            source.height,
+            Matrix().apply { postRotate(rotation.toFloat()) },
+            true
+        )
     }
 }
