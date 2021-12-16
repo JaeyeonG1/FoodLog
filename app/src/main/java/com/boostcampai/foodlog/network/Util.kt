@@ -21,7 +21,7 @@ suspend fun <T : Any> callSafeApi(call: suspend () -> Response<T>): Result<T> {
                 Result.failure(Exception("Data Load Failed"))
             }
         } else {
-            Log.d("callSafeApi", "Failure")
+            Log.d("callSafeApi", "Failure ${response.errorBody()?.string()}")
             Result.failure(Exception(response.message()))
         }
 

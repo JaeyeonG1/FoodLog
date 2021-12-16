@@ -2,6 +2,7 @@ package com.boostcampai.foodlog
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -14,6 +15,7 @@ class FoodLogApplication : Application() {
     private val prefsFileName = "prefs"
 
     override fun onCreate() {
+        AndroidThreeTen.init(applicationContext)
         goalValuePreference =
             IntPreference(
                 applicationContext.getSharedPreferences(prefsFileName, 0),

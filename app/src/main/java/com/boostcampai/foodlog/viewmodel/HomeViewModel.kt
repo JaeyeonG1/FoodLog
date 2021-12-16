@@ -1,6 +1,5 @@
 package com.boostcampai.foodlog.viewmodel
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -13,7 +12,7 @@ import com.boostcampai.foodlog.model.TodayDietModel
 import com.boostcampai.foodlog.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +32,6 @@ class HomeViewModel @Inject constructor(
         loadDailyDiets()
     }
 
-    @SuppressLint("NewApi")
     fun getCurrentDate() = LocalDate.now().toString()
 
     private fun loadDailyDiets() {
