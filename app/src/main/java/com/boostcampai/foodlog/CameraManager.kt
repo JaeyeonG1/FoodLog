@@ -5,13 +5,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.util.DisplayMetrics
 import android.util.Log
-import android.util.Size
 import android.view.Surface.ROTATION_0
+import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
@@ -29,8 +29,6 @@ class CameraManager(
     private lateinit var imageCapture: ImageCapture
     private lateinit var camera: Camera
     private lateinit var cameraProvider: ProcessCameraProvider
-
-    lateinit var metrics: DisplayMetrics
 
     private var cameraFacingOption = CameraSelector.LENS_FACING_BACK
 
@@ -63,8 +61,9 @@ class CameraManager(
         }?.rotation ?: ROTATION_0
 
         imageCapture = ImageCapture.Builder()
+            .setCaptureMode(CAPTURE_MODE_MAXIMIZE_QUALITY)
             .setTargetRotation(rotation)
-            .setTargetResolution(Size(cameraView.width, cameraView.height))
+            .setTargetAspectRatio(RATIO_4_3)
             .build()
     }
 
@@ -74,16 +73,12 @@ class CameraManager(
                 {
                     cameraProvider = get()
                     preview = Preview.Builder()
-                        .setTargetResolution(Size(cameraView.width, cameraView.height))
+                        .setTargetAspectRatio(RATIO_4_3)
                         .build()
 
                     val cameraSelector = CameraSelector.Builder()
                         .requireLensFacing(cameraFacingOption)
                         .build()
-
-                    metrics = DisplayMetrics().also {
-                        cameraView.display.getRealMetrics(it)
-                    }
 
                     buildImageCapture()
                     setCameraConfig(cameraProvider, cameraSelector)

@@ -24,6 +24,8 @@
             android:id="@+id/pv_camera"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:scaleType="fitCenter"
+            app:layout_constraintDimensionRatio="3:4"
             app:layout_constraintBottom_toTopOf="@id/gl_80_hrz"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
