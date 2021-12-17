@@ -6,6 +6,9 @@ data class TodayDietModel(
 ) {
     fun foodsToString(): String {
         val str = foods.fold("") { sum, now -> "$sum${now.name}, " }
+        if (str.isEmpty()){
+            return ""
+        }
         return str.substring(0, str.length - 2)
     }
 

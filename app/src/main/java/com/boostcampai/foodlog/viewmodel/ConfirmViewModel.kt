@@ -69,6 +69,7 @@ class ConfirmViewModel @Inject constructor(
         food.dan,
         food.zi,
         food.tan,
+        food.na,
         imgId
     )
 }

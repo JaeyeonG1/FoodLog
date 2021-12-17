@@ -15,6 +15,7 @@ data class Food(
     var dan: Float,
     var zi: Float,
     var tan: Float,
+    var na : Float,
     var imgId: Long,
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
@@ -24,8 +25,8 @@ data class Food(
             "kcal" -> { kcal }
             "tan" -> { tan }
             "dan" -> { dan }
-            "zi" -> {zi}
-//            "na" -> {}
+            "zi" -> { zi }
+            "na" -> { na }
             else -> { 0f }
         }
     }
@@ -57,11 +58,11 @@ fun List<Food>.total(unit: String): Float {
                 sum + now.zi
             }
         }
-//        "na" -> {
-//            this.fold(0f) { sum, now ->
-//                sum + now.na
-//            }
-//        }
+        "na" -> {
+            this.fold(0f) { sum, now ->
+                sum + now.na
+            }
+        }
         else -> {
             0f
         }
