@@ -9,6 +9,7 @@ import com.boostcampai.foodlog.model.BoundingBox
 import com.boostcampai.foodlog.model.Diet
 import com.boostcampai.foodlog.model.Food
 import com.boostcampai.foodlog.model.Position
+import com.boostcampai.foodlog.network.DietResponse
 import com.boostcampai.foodlog.network.FoodResponse
 import com.boostcampai.foodlog.network.InferenceResponse
 import com.boostcampai.foodlog.repository.CameraRepository
@@ -27,12 +28,9 @@ class ConfirmViewModel @Inject constructor(
     private var _inferenceResult = MutableLiveData<InferenceResponse>()
     val inferenceResult: LiveData<InferenceResponse> = _inferenceResult
 
-    private var _boundingBoxes = MutableLiveData<List<BoundingBox>>()
-    val boundingBoxes: MutableLiveData<List<BoundingBox>> = _boundingBoxes
-
     var imgBase64: String = ""
 
-    fun inferenceFromBitmap() {
+    fun inferenceFromBitmap(onSuccess: (DietResponse) -> (Unit)) {
         CoroutineScope(Dispatchers.IO).launch {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
             cameraRepository.getInferenceResult(imgBase64, LocalDateTime.now().format(formatter))
@@ -40,9 +38,7 @@ class ConfirmViewModel @Inject constructor(
                     viewModelScope.launch {
                         _inferenceResult.value = it
                         Log.d("Result", it.toString())
-                        _boundingBoxes.value = it.diet.foods.map { food ->
-                            BoundingBox(food.pos[0], food.pos[1], food.pos[2], food.pos[3])
-                        }
+                        onSuccess(it.diet)
                     }
                 }.onFailure {
                     Log.d("getImageInferenceResult", "Failure")

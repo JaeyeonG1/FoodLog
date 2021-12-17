@@ -16,7 +16,7 @@
         tools:context=".view.ConfirmFragment">
 
         <ImageView
-            android:id="@+id/iv_result"
+            android:id="@+id/iv_confirm"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="fitCenter"

@@ -1,9 +1,5 @@
 package com.boostcampai.foodlog.view
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.convertBitmapToBase64
 import com.boostcampai.foodlog.databinding.FragmentConfirmBinding
-import com.boostcampai.foodlog.model.BoundingBox
+import com.boostcampai.foodlog.drawBoundingBoxes
 import com.boostcampai.foodlog.viewmodel.ConfirmViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,17 +36,19 @@ class ConfirmFragment : Fragment() {
         binding.viewModel = viewModel
 
         viewModel.inferenceResult.observe(viewLifecycleOwner, {})
-        viewModel.boundingBoxes.observe(viewLifecycleOwner, {
-            binding.ivResult.setImageBitmap(navArgs.bitmap.drawBoundingBoxes(it))
-        })
 
         navArgs.bitmap.let {
-            binding.ivResult.setImageBitmap(it)
+            binding.ivConfirm.setImageBitmap(it)
             viewModel.imgBase64 = convertBitmapToBase64(it)
         }
 
         binding.btnTest.setOnClickListener {
-            viewModel.inferenceFromBitmap()
+            viewModel.inferenceFromBitmap { diet ->
+                val action = ConfirmFragmentDirections.actionConfirmFragmentToResultFragment(
+                    navArgs.bitmap, diet
+                )
+                findNavController().navigate(action)
+            }
         }
 
         binding.btnSave.setOnClickListener {
@@ -57,27 +56,4 @@ class ConfirmFragment : Fragment() {
         }
     }
 
-    private fun Bitmap.drawBoundingBoxes(boundingBoxes: List<BoundingBox>): Bitmap? {
-        val bitmap = copy(config, true)
-        val canvas = Canvas(bitmap)
-
-        Paint().apply {
-            color = Color.RED
-            isAntiAlias = true
-            style = Paint.Style.STROKE
-            strokeWidth = 5f
-
-            boundingBoxes.forEach {
-                canvas.drawRect(
-                    width * it.left,
-                    height * it.top,
-                    width * it.right,
-                    height * it.bottom,
-                    this
-                )
-            }
-        }
-
-        return bitmap
-    }
 }
