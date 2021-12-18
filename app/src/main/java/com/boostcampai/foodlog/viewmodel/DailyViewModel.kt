@@ -14,15 +14,15 @@ class DailyViewModel @Inject constructor(
 ): ViewModel(){
     lateinit var date: String
     val unit: LiveData<String> = FoodLogApplication.goalUnitPreference
-    val dailyFoods: MutableList<DailyFoodModel> = mutableListOf()
+    var dailyFoods: List<DailyFoodModel> = listOf()
 
     fun initDailyFoods(dietWithFoods: List<DietWithFoods>){
         date = getDate(dietWithFoods[0].diet.dateTime)
 
         dietWithFoods.forEach {
-            it.foods.forEach{ food ->
+            dailyFoods = it.foods.map { food ->
                 Log.d("food item", food.toString())
-                dailyFoods?.add(DailyFoodModel(it.diet.uri, getTime(it.diet.dateTime), food))
+                DailyFoodModel(it.diet.uri, getTime(it.diet.dateTime), food)
             }
         }
     }

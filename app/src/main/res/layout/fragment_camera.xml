@@ -18,7 +18,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/main"
         tools:context=".view.ConfirmFragment">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_10_hrz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintGuide_percent="0.1"
+            android:orientation="horizontal" />
 
         <androidx.camera.view.PreviewView
             android:id="@+id/pv_camera"
@@ -27,14 +35,14 @@
             app:layout_constraintBottom_toTopOf="@id/gl_80_hrz"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/gl_10_hrz" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_80_hrz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
+            app:layout_constraintGuide_percent="0.85" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_10_vtc"
@@ -49,6 +57,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.9" />
+
+<!--        <View-->
+<!--            android:background="@color/white"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintTop_toTopOf="@id/gl_80_hrz"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"/>-->
+
 
         <ImageButton
             android:id="@+id/btn_gallery"

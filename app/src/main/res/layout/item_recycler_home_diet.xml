@@ -17,6 +17,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:cardElevation="0dp"
             app:cardCornerRadius="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,9 +30,9 @@
                     android:layout_height="0dp"
                     android:layout_margin="14dp"
                     android:text="@{item.dateTime}"
-                    android:textColor="#000000"
                     android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/binggrae_bold"
+                    android:textColor="#4b4b4b"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="07:20"/>
@@ -42,8 +43,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="14dp"
                     android:text="@{item.foodsToString()}"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/binggrae_bold"
+                    android:textColor="#4b4b4b"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintWidth_percent="0.6"
@@ -55,8 +57,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_margin="14dp"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/binggrae_bold"
+                    android:textColor="#4b4b4b"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
