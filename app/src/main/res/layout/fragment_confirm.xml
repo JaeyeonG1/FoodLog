@@ -20,35 +20,61 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="@id/gl_80_hrz"
+            app:layout_constraintBottom_toBottomOf="@id/gl_85_hrz"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gl_80_hrz"
+            android:id="@+id/gl_85_hrz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
-
-        <Button
-            android:id="@+id/btn_test"
-            android:layout_width="wrap_content"
+            app:layout_constraintGuide_percent="0.85" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="분석하기"
+            app:layout_constraintTop_toBottomOf="@id/gl_85_hrz"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gl_80_hrz" />
-
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="Save"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gl_80_hrz" />
+            android:background="@color/white">
+
+            <Button
+                android:id="@+id/btn_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="예측하기"
+                android:textSize="20dp"
+                android:fontFamily="@font/binggrae_bold"
+                android:textColor="@color/main"
+                android:background="@color/white"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_reset"
+                android:layout_marginEnd="40dp"/>
+
+            <Button
+                android:id="@+id/btn_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="다시 찍기"
+                android:textSize="20dp"
+                android:stateListAnimator="@null"
+                android:fontFamily="@font/binggrae_bold"
+                android:textColor="@color/main"
+                android:background="@color/white"
+                android:shadowColor="@color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_test"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="40dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

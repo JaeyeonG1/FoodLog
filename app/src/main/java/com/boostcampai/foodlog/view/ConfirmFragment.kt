@@ -50,8 +50,8 @@ class ConfirmFragment : Fragment() {
             }
         }
 
-        binding.btnSave.setOnClickListener {
-            viewModel.saveResult()
+        binding.btnReset.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

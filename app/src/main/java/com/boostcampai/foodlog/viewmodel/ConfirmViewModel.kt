@@ -45,25 +45,6 @@ class ConfirmViewModel @Inject constructor(
         }
     }
 
-    fun saveResult() {
-        if (inferenceResult.value == null)
-            return
-
-        val dateTime = inferenceResult.value!!.diet.date
-        val foods = inferenceResult.value!!.diet.foods
-        val uri = "uri"
-
-        CoroutineScope(Dispatchers.IO).launch {
-            Diet(uri = uri, dateTime = dateTime)
-                .let {
-                    val id = cameraRepository.dietDao.insert(it)
-                    foods.map { foodResponse ->
-                        foodResponseToFood(foodResponse, id[0])
-                    }.let { food -> cameraRepository.foodDao.insert(*food.toTypedArray()) }
-                }
-        }
-    }
-
     private fun foodResponseToFood(food: FoodResponse, imgId: Long) = Food(
         food.name,
         food.cls,

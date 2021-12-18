@@ -14,9 +14,9 @@
         <ImageView
             android:id="@+id/iv_result"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="3:4"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_outline_circle_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
