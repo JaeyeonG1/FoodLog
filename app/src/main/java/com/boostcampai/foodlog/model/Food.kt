@@ -15,19 +15,31 @@ data class Food(
     var dan: Float,
     var zi: Float,
     var tan: Float,
-    var na : Float,
+    var na: Float,
     var imgId: Long,
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
 ) : Parcelable {
     fun getValueByUnit(unit: String): Float {
         return when (unit) {
-            "kcal" -> { kcal }
-            "tan" -> { tan }
-            "dan" -> { dan }
-            "zi" -> { zi }
-            "na" -> { na }
-            else -> { 0f }
+            "kcal" -> {
+                kcal
+            }
+            "tan" -> {
+                tan
+            }
+            "dan" -> {
+                dan
+            }
+            "zi" -> {
+                zi
+            }
+            "na" -> {
+                na
+            }
+            else -> {
+                0f
+            }
         }
     }
 
@@ -37,36 +49,59 @@ data class Food(
 }
 
 fun List<Food>.total(unit: String): Float {
-    var temp = when (unit) {
+    return this.fold(0f) { sum, now ->
+        sum + when (unit) {
+            "kcal" -> now.kcal
+            "tan" -> now.tan
+            "dan" -> now.dan
+            "zi" -> now.zi
+            "na" -> now.na
+            else -> 0f
+        }
+    }
+}
+
+fun List<Food>.subUnits(unit: String): Triple<List<String>, List<Float>, List<String>> {
+    val names = mutableListOf("칼로리", "탄수화물", "단백질", "지방", "나트륨")
+    val units = mutableListOf("kcal", "g", "g", "g", "mg")
+    val values = when (unit) {
         "kcal" -> {
-            this.fold(0f) { sum, now ->
-                sum + now.kcal
+            names.removeAt(0)
+            units.removeAt(0)
+            this.fold(mutableListOf(0f, 0f, 0f, 0f)) { sum, now ->
+                mutableListOf(sum[0] + now.tan, sum[1] + now.dan, sum[2] + now.zi, sum[3] + now.na)
             }
         }
         "tan" -> {
-            this.fold(0f) { sum, now ->
-                sum + now.tan
+            names.removeAt(1)
+            units.removeAt(1)
+            this.fold(mutableListOf(0f, 0f, 0f, 0f)) { sum, now ->
+                mutableListOf(sum[0] + now.kcal, sum[1] + now.dan, sum[2] + now.zi, sum[3] + now.na)
             }
         }
         "dan" -> {
-            this.fold(0f) { sum, now ->
-                sum + now.dan
+            names.removeAt(2)
+            units.removeAt(2)
+            this.fold(mutableListOf(0f, 0f, 0f, 0f)) { sum, now ->
+                mutableListOf(sum[0] + now.kcal, sum[1] + now.tan, sum[2] + now.zi, sum[3] + now.na)
             }
         }
         "zi" -> {
-            this.fold(0f) { sum, now ->
-                sum + now.zi
+            names.removeAt(3)
+            units.removeAt(3)
+            this.fold(mutableListOf(0f, 0f, 0f, 0f)) { sum, now ->
+                mutableListOf(sum[0] + now.kcal, sum[1] + now.tan, sum[2] + now.dan, sum[3] + now.na)
             }
         }
         "na" -> {
-            this.fold(0f) { sum, now ->
-                sum + now.na
+            names.removeAt(4)
+            units.removeAt(4)
+            this.fold(mutableListOf(0f, 0f, 0f, 0f)) { sum, now ->
+                mutableListOf(sum[0] + now.kcal, sum[1] + now.tan, sum[2] + now.dan, sum[3] + now.zi)
             }
         }
-        else -> {
-            0f
-        }
+        else -> mutableListOf(0f, 0f, 0f, 0f)
     }
 
-    return temp
+    return Triple(names, values, units)
 }

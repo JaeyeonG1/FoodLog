@@ -1,6 +1,8 @@
 package com.boostcampai.foodlog.network
 
 import android.os.Parcelable
+import com.boostcampai.foodlog.model.Food
+import com.boostcampai.foodlog.model.Position
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -42,4 +44,10 @@ data class FoodResponse(
     val na: Float,
     @SerializedName("serving_size")
     val servingSize: String,
-) : Parcelable
+) : Parcelable {
+    fun convertToFood(imgId: Long): Food {
+        return Food(
+            name, cls, Position(pos[0], pos[1], pos[2], pos[3]), kcal, dan, zi, tan, na, imgId
+        )
+    }
+}

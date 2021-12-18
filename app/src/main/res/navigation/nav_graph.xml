@@ -16,6 +16,9 @@
         <argument
             android:name="bitmap"
             app:argType="android.graphics.Bitmap" />
+        <action
+            android:id="@+id/action_confirmFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
     </fragment>
 
     <fragment
@@ -45,8 +48,22 @@
         android:name="com.boostcampai.foodlog.view.DailyFragment"
         android:label="DailyFragment">
 
-        <argument android:name="foods"
-            app:argType="com.boostcampai.foodlog.data.dao.DietWithFoods[]"/>
+        <argument
+            android:name="foods"
+            app:argType="com.boostcampai.foodlog.data.dao.DietWithFoods[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.boostcampai.foodlog.view.ResultFragment"
+        android:label="ResultFragment">
+
+        <argument
+            android:name="bitmap"
+            app:argType="android.graphics.Bitmap" />
+
+        <argument
+            android:name="inferenceResult"
+            app:argType="com.boostcampai.foodlog.network.DietResponse" />
     </fragment>
 
 </navigation>
