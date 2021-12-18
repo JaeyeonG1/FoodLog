@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { controller, dest, args ->
             binding.toolbar.visibility = View.VISIBLE
             binding.toolbar.titleMarginStart = 10
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
 
             val customToolbarSet = setOf(R.id.resultFragment)
 

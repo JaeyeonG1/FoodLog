@@ -1,8 +1,10 @@
 package com.boostcampai.foodlog.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.boostcampai.foodlog.FoodLogApplication
 import com.boostcampai.foodlog.model.Diet
 import com.boostcampai.foodlog.model.InferenceResult
@@ -21,16 +23,27 @@ class ResultViewModel @Inject constructor(
     val goal: LiveData<Int> = FoodLogApplication.goalValuePreference
     val unit: LiveData<String> = FoodLogApplication.goalUnitPreference
 
+    lateinit var originResult: DietResponse
     private var _inferenceResult = MutableLiveData<InferenceResult>()
     val inferenceResult: LiveData<InferenceResult> = _inferenceResult
 
     fun loadInferenceResult(result: DietResponse) {
+        originResult = result
         _inferenceResult.value = InferenceResult(
             result.date.split(" ")[0],
             result.date.split(" ")[1],
             result.status,
             result.foods.map { it.convertToFood(0L) }
         )
+    }
+
+    fun sendFeedback(base64: String, list: List<Boolean>, onResult: (String) -> (Unit)) {
+        Log.d("SendFeedback", list.toString())
+        viewModelScope.launch {
+            cameraRepository.sendFeedback(base64, originResult.date, originResult.foods, list)
+                .onSuccess { onResult(it) }
+                .onFailure { onResult("전송에 실패했습니다.") }
+        }
     }
 
     fun removeFood(pos: Int) {

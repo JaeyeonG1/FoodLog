@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_feedback"
+        android:icon="@drawable/ic_round_priority_high_24"
+        android:title="피드백\n보내기"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_save"
         android:icon="@drawable/ic_baseline_save_alt_24"
-        app:showAsAction="always"
-        android:title="저장" />
+        android:title="저장"
+        app:showAsAction="always" />
 </menu>
