@@ -1,7 +1,7 @@
 package com.boostcampai.foodlog.repository
 
-import android.util.Log
 import com.boostcampai.foodlog.di.RemoteSource
+import com.boostcampai.foodlog.network.FoodResponse
 import com.boostcampai.foodlog.network.ImageInferenceService
 import com.boostcampai.foodlog.network.InferenceResponse
 import com.boostcampai.foodlog.network.callSafeApi
@@ -17,6 +17,10 @@ interface InferenceSource {
         base64: String,
         dateTime: String
     ): Result<InferenceResponse>
+
+    suspend fun sendFeedback(
+        base64: String, dateTime: String, foodList: List<FoodResponse>, feedback: List<Boolean>
+    ): Result<String>
 }
 
 class RemoteInferenceSource @Inject constructor(
@@ -28,7 +32,29 @@ class RemoteInferenceSource @Inject constructor(
     ): Result<InferenceResponse> =
         callSafeApi {
             hashMapOf(Pair("img", base64), Pair("date_time", dateTime))
-            inferenceService.requestInferenceResult(hashMapOf(Pair("img", base64), Pair("date_time", dateTime))).execute()
+            inferenceService.requestInferenceResult(
+                hashMapOf(
+                    Pair("img", base64),
+                    Pair("date_time", dateTime)
+                )
+            ).execute()
+        }
+
+    override suspend fun sendFeedback(
+        base64: String,
+        dateTime: String,
+        foodList: List<FoodResponse>,
+        feedback: List<Boolean>
+    ): Result<String> =
+        callSafeApi {
+            inferenceService.sendFeedback(
+                hashMapOf(
+                    Pair("img", base64),
+                    Pair("date_time", dateTime),
+                    Pair("food_list", foodList),
+                    Pair("feedback", feedback)
+                )
+            ).execute()
         }
 }
 

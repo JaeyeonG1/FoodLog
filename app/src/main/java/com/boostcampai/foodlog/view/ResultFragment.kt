@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,6 +24,7 @@ import androidx.navigation.fragment.navArgs
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.adapter.ResultItem
 import com.boostcampai.foodlog.adapter.ResultMultiViewRecyclerAdapter
+import com.boostcampai.foodlog.convertBitmapToBase64
 import com.boostcampai.foodlog.databinding.FragmentResultBinding
 import com.boostcampai.foodlog.drawBoundingBoxes
 import com.boostcampai.foodlog.viewmodel.ResultViewModel
@@ -73,6 +75,18 @@ class ResultFragment : Fragment() {
                         val action = ResultFragmentDirections.actionResultFragmentToHomeFragment()
                         findNavController().navigate(action)
                         return@setOnMenuItemClickListener true
+                    }
+                } else if (it.itemId == R.id.action_feedback) {
+                    viewModel.inferenceResult.value?.foods?.let { foods ->
+                        FeedbackDialogFragment(navArgs.bitmap, foods) { feedback ->
+                            viewModel.sendFeedback(
+                                convertBitmapToBase64(navArgs.bitmap),
+                                feedback
+                            ) { resultMessage ->
+                                Toast.makeText(requireContext(), resultMessage, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }.show(requireActivity().supportFragmentManager, "피드백 보내기")
                     }
                 }
                 return@setOnMenuItemClickListener false

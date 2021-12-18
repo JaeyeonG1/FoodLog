@@ -14,6 +14,12 @@ interface ImageInferenceService {
         @Body body: HashMap<String, String>
     ): Call<InferenceResponse>
 
+    @Headers("Content-Type: application/json; charset=UTF-8")
+    @POST("api/v1/feedback")
+    fun sendFeedback(
+        @Body body: HashMap<String, Any>
+    ): Call<String>
+
     companion object {
         private const val apiUrl = "http://192.168.0.61:8000/"
 
