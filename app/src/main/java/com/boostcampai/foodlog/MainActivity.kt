@@ -1,9 +1,11 @@
 package com.boostcampai.foodlog
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.boostcampai.foodlog.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,5 +23,22 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         navController = navHostFragment!!.findNavController()
         binding.bottomNavigation.setupWithNavController(navController)
+
+        val topLevelDestSet = hashSetOf(
+            R.id.homeFragment, R.id.cameraFragment, R.id.detailFragment
+        )
+
+        val appBarConfig = AppBarConfiguration.Builder(topLevelDestSet).build()
+        binding.toolbar.setupWithNavController(navController, appBarConfig)
+
+        navController.addOnDestinationChangedListener { controller, dest, args ->
+            binding.toolbar.visibility = View.VISIBLE
+            binding.toolbar.titleMarginStart = 10
+
+            val customToolbarSet = setOf(R.id.resultFragment)
+
+            if (customToolbarSet.contains(dest.id) || topLevelDestSet.contains(dest.id))
+                binding.toolbar.visibility = View.GONE
+        }
     }
 }

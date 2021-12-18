@@ -7,12 +7,12 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.boostcampai.foodlog.view.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="" />
 
     <fragment
         android:id="@+id/confirmFragment"
         android:name="com.boostcampai.foodlog.view.ConfirmFragment"
-        android:label="PhotoFragment">
+        android:label="">
         <argument
             android:name="bitmap"
             app:argType="android.graphics.Bitmap" />
@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.boostcampai.foodlog.view.CameraFragment"
-        android:label="CameraFragment">
+        android:label="">
         <action
             android:id="@+id/action_cameraFragment_to_confirmFragment"
             app:destination="@id/confirmFragment" />
@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.boostcampai.foodlog.view.DetailFragment"
-        android:label="DetailFragment">
+        android:label="">
         <action
             android:id="@+id/action_detailFragment_to_dailyFragment"
             app:destination="@id/dailyFragment"
@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/dailyFragment"
         android:name="com.boostcampai.foodlog.view.DailyFragment"
-        android:label="DailyFragment">
+        android:label="">
 
         <argument
             android:name="foods"
@@ -55,7 +55,13 @@
     <fragment
         android:id="@+id/resultFragment"
         android:name="com.boostcampai.foodlog.view.ResultFragment"
-        android:label="ResultFragment">
+        android:label="">
+
+        <action
+            android:id="@+id/action_resultFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
 
         <argument
             android:name="bitmap"
