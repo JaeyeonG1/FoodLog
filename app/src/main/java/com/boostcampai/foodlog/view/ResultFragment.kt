@@ -13,8 +13,6 @@ import com.boostcampai.foodlog.adapter.ResultItem
 import com.boostcampai.foodlog.adapter.ResultMultiViewRecyclerAdapter
 import com.boostcampai.foodlog.databinding.FragmentResultBinding
 import com.boostcampai.foodlog.drawBoundingBoxes
-import com.boostcampai.foodlog.model.BoundingBox
-import com.boostcampai.foodlog.model.InferenceResult
 import com.boostcampai.foodlog.viewmodel.ResultViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +22,7 @@ class ResultFragment : Fragment() {
     private lateinit var binding: FragmentResultBinding
     private val viewModel: ResultViewModel by viewModels()
     private val navArgs: ResultFragmentArgs by navArgs()
+    private lateinit var adapter: ResultMultiViewRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,34 +38,31 @@ class ResultFragment : Fragment() {
         binding.viewModel = viewModel
         viewModel.loadInferenceResult(navArgs.inferenceResult)
 
-        val adapter = ResultMultiViewRecyclerAdapter()
+        adapter = ResultMultiViewRecyclerAdapter { pos -> viewModel.removeFood(pos) }
+        setRecyclerAdapter()
+        initObservers()
+    }
+
+    private fun setRecyclerAdapter() {
         binding.rvResultRoot.adapter = adapter
         adapter.unit = viewModel.unit.value ?: "kcal"
         adapter.goal = viewModel.goal.value ?: 2000
 
-        val foods = navArgs.inferenceResult.foods.map { it.convertToFood(0) }
-        val header = ResultItem.Header(
-            InferenceResult(
-                navArgs.inferenceResult.date.split(" ")[0],
-                navArgs.inferenceResult.date.split(" ")[1],
-                navArgs.inferenceResult.status,
-                foods
-            )
-        )
+        val header = viewModel.inferenceResult.value?.let { ResultItem.Header(it) }
+        val foods = viewModel.inferenceResult.value?.foods ?: listOf()
 
         adapter.submitList(
             listOf(
                 header,
-                ResultItem.Image(navArgs.bitmap.drawBoundingBoxes(navArgs.inferenceResult.foods.map {
-                    BoundingBox(
-                        it.pos[0],
-                        it.pos[1],
-                        it.pos[2],
-                        it.pos[3]
-                    )
-                })),
+                ResultItem.Image(navArgs.bitmap.drawBoundingBoxes(foods.map { it.pos })),
                 ResultItem.Foods(foods, navArgs.bitmap)
             )
         )
+    }
+
+    private fun initObservers() {
+        viewModel.goal.observe(viewLifecycleOwner, { setRecyclerAdapter() })
+        viewModel.unit.observe(viewLifecycleOwner, { setRecyclerAdapter() })
+        viewModel.inferenceResult.observe(viewLifecycleOwner, { setRecyclerAdapter() })
     }
 }

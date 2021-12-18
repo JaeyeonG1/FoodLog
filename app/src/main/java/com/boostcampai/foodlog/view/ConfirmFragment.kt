@@ -12,7 +12,6 @@ import androidx.navigation.fragment.navArgs
 import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.convertBitmapToBase64
 import com.boostcampai.foodlog.databinding.FragmentConfirmBinding
-import com.boostcampai.foodlog.drawBoundingBoxes
 import com.boostcampai.foodlog.viewmodel.ConfirmViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

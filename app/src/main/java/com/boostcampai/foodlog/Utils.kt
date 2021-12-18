@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.Base64
-import com.boostcampai.foodlog.model.BoundingBox
 import com.boostcampai.foodlog.model.Position
 import java.io.ByteArrayOutputStream
 
@@ -23,7 +22,7 @@ fun convertBitmapToBase64(bitmap: Bitmap): String {
     return Base64.encodeToString(outputStream.toByteArray(), 0) ?: ""
 }
 
-fun Bitmap.drawBoundingBoxes(boundingBoxes: List<BoundingBox>): Bitmap {
+fun Bitmap.drawBoundingBoxes(boundingBoxes: List<Position>): Bitmap {
     val bitmap = copy(config, true)
     val canvas = Canvas(bitmap)
 
@@ -35,10 +34,10 @@ fun Bitmap.drawBoundingBoxes(boundingBoxes: List<BoundingBox>): Bitmap {
 
         boundingBoxes.forEach {
             canvas.drawRect(
-                width * it.left,
-                height * it.top,
-                width * it.right,
-                height * it.bottom,
+                width * it.topLeftX,
+                height * it.topLeftY,
+                width * it.bottomRightX,
+                height * it.bottomRightY,
                 this
             )
         }

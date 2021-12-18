@@ -14,7 +14,7 @@ import com.boostcampai.foodlog.model.InferenceResult
 import com.boostcampai.foodlog.model.subUnits
 import com.boostcampai.foodlog.model.total
 
-class ResultMultiViewRecyclerAdapter :
+class ResultMultiViewRecyclerAdapter(val onRemove: (Int) -> Unit) :
     ListAdapter<ResultItem, RecyclerView.ViewHolder>(ResultDiffUtil()) {
     var goal = 2000
     var unit = "kcal"
@@ -71,18 +71,18 @@ class ResultMultiViewRecyclerAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(result: ResultItem.Header) {
             binding.item = result.result
-            binding.tvNutritionMain.text =
-                "${result.result.foods.total(unit).toInt()} $unit / $goal $unit"
+            "${result.result.foods.total(unit).toInt()} $unit / $goal $unit"
+                .also { binding.tvNutritionMain.text = it }
 
-            result.result.foods.subUnits(unit).also {
-                binding.tvNutritionSub1Title.text = it.first[0]
-                binding.tvNutritionSub2Title.text = it.first[1]
-                binding.tvNutritionSub3Title.text = it.first[2]
-                binding.tvNutritionSub4Title.text = it.first[3]
-                binding.tvNutritionSub1.text = "${it.second[0].toInt()}${it.third[0]}"
-                binding.tvNutritionSub2.text = "${it.second[1].toInt()}${it.third[1]}"
-                binding.tvNutritionSub3.text = "${it.second[2].toInt()}${it.third[2]}"
-                binding.tvNutritionSub4.text = "${it.second[3].toInt()}${it.third[3]}"
+            result.result.foods.subUnits(unit).also { trp ->
+                binding.tvNutritionSub1Title.text = trp.first[0]
+                "${trp.second[0].toInt()}${trp.third[0]}".also { binding.tvNutritionSub1.text = it }
+                binding.tvNutritionSub2Title.text = trp.first[1]
+                "${trp.second[1].toInt()}${trp.third[1]}".also { binding.tvNutritionSub2.text = it }
+                binding.tvNutritionSub3Title.text = trp.first[2]
+                "${trp.second[2].toInt()}${trp.third[2]}".also { binding.tvNutritionSub3.text = it }
+                binding.tvNutritionSub4Title.text = trp.first[3]
+                "${trp.second[3].toInt()}${trp.third[3]}".also { binding.tvNutritionSub4.text = it }
             }
         }
     }
@@ -98,7 +98,7 @@ class ResultMultiViewRecyclerAdapter :
         RecyclerView.ViewHolder(binding.root) {
         lateinit var adapter: ResultFoodRecyclerAdapter
         fun bind(foods: ResultItem.Foods) {
-            adapter = ResultFoodRecyclerAdapter(foods.image)
+            adapter = ResultFoodRecyclerAdapter(foods.image, onRemove)
             binding.rvFoods.adapter = adapter
             adapter.submitList(foods.foods)
         }

@@ -10,7 +10,7 @@ import com.boostcampai.foodlog.cropBitmap
 import com.boostcampai.foodlog.databinding.ItemRecyclerResultFoodBinding
 import com.boostcampai.foodlog.model.Food
 
-class ResultFoodRecyclerAdapter(val image: Bitmap) :
+class ResultFoodRecyclerAdapter(val image: Bitmap, val onRemove: (Int) -> Unit) :
     ListAdapter<Food, ResultFoodRecyclerAdapter.FoodViewHolder>(ResultFoodDiffUtil()) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -30,6 +30,7 @@ class ResultFoodRecyclerAdapter(val image: Bitmap) :
     inner class FoodViewHolder(val binding: ItemRecyclerResultFoodBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(food: Food) {
+            binding.btnRemove.setOnClickListener { onRemove(bindingAdapterPosition) }
             binding.ivFood.setImageBitmap(image.cropBitmap(food.pos))
             binding.tvName.text = food.name
             binding.tvNutrition.text = food.kcal.toString() + "kcal"
