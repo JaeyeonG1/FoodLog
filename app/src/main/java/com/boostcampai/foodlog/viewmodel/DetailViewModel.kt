@@ -1,8 +1,11 @@
 package com.boostcampai.foodlog.viewmodel
 
-import android.annotation.SuppressLint
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.boostcampai.foodlog.FoodLogApplication
 import com.boostcampai.foodlog.data.dao.DietWithFoods
 import com.boostcampai.foodlog.model.DailyDietModel
@@ -10,8 +13,16 @@ import com.boostcampai.foodlog.model.Food
 import com.boostcampai.foodlog.repository.DailyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
+import kotlin.collections.List
+import kotlin.collections.MutableList
+import kotlin.collections.forEach
+import kotlin.collections.hashMapOf
+import kotlin.collections.map
+import kotlin.collections.mutableListOf
+import kotlin.collections.set
+import kotlin.collections.toMutableList
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
@@ -29,12 +40,11 @@ class DetailViewModel @Inject constructor(
 
     var date = getCurrentDate()
 
-    @SuppressLint("NewApi")
-    fun getCurrentDate() = LocalDate.now().toString()
-    fun loadDietWithFoods(date: String): List<DietWithFoods>{
+    private fun getCurrentDate() = LocalDate.now().toString()
+    fun loadDietWithFoods(date: String): List<DietWithFoods> {
         val list = mutableListOf<DietWithFoods>()
         dietWithFoods.value?.forEach {
-            if(it.diet.dateTime.contains(date)){
+            if (it.diet.dateTime.contains(date)) {
                 list.add(it)
                 Log.d("load", it.toString())
             }
