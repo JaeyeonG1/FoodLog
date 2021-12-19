@@ -79,7 +79,7 @@
             android:src="@drawable/ic_outline_photo_library_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/gl_10_vtc"
-            app:layout_constraintTop_toBottomOf="@id/gl_80_hrz" />
+            app:layout_constraintTop_toBottomOf="@id/gl_80_hrz"/>
 
         <ImageButton
             android:id="@+id/btn_picture"

@@ -1,6 +1,7 @@
 package com.boostcampai.foodlog
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -36,11 +37,20 @@ class MainActivity : AppCompatActivity() {
             binding.toolbar.titleMarginStart = 10
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
-
             val customToolbarSet = setOf(R.id.resultFragment)
 
             if (customToolbarSet.contains(dest.id) || topLevelDestSet.contains(dest.id))
                 binding.toolbar.visibility = View.GONE
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

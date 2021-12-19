@@ -1,11 +1,22 @@
 package com.boostcampai.foodlog.view
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -17,6 +28,7 @@ import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.databinding.FragmentCameraBinding
 import com.boostcampai.foodlog.viewmodel.CameraViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 
 @AndroidEntryPoint
 class CameraFragment : Fragment() {
@@ -25,6 +37,8 @@ class CameraFragment : Fragment() {
     private val viewModel: CameraViewModel by viewModels()
 
     private val cameraRequestCode = 100
+
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +57,46 @@ class CameraFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.cameraManager = cameraManager
+
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK && it.data != null) {
+                    Log.d("result", "RESULT_OK")
+                    var currentImageUri = it.data?.data
+                    try {
+                        currentImageUri?.let {
+                            if (Build.VERSION.SDK_INT < 28) {
+                                val bitmap = MediaStore.Images.Media.getBitmap(
+                                    requireActivity().contentResolver,
+                                    currentImageUri
+                                ).copy(Bitmap.Config.ARGB_8888, true)
+                                // 여기서 bitmap 초기화
+                                val action = CameraFragmentDirections.actionCameraFragmentToConfirmFragment(bitmap)
+                                findNavController().navigate(action)
+
+                            } else {
+                                val source = ImageDecoder.createSource(
+                                    requireActivity().contentResolver,
+                                    currentImageUri
+                                )
+                                val bitmap = ImageDecoder.decodeBitmap(source).copy(Bitmap.Config.ARGB_8888, true)
+                                val action = CameraFragmentDirections.actionCameraFragmentToConfirmFragment(bitmap)
+                                findNavController().navigate(action)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.d("exception", "exception")
+                        e.printStackTrace()
+                    }
+                } else if (it.resultCode == RESULT_CANCELED) {
+                    Toast.makeText(context, "사진 선택 취소", Toast.LENGTH_LONG).show()
+                } else {
+                    Log.d("wrong", "")
+                }
+            }
+        binding.btnGallery.setOnClickListener {
+            selectImageFromGallery()
+        }
     }
 
     override fun onResume() {
@@ -57,6 +111,14 @@ class CameraFragment : Fragment() {
                 100
             )
         }
+    }
+
+    private fun selectImageFromGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+
+        resultLauncher.launch(intent)
     }
 
     private fun createCameraManager(onCapture: (Bitmap) -> Unit) {
