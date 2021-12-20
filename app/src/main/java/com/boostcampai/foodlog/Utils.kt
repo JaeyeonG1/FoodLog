@@ -14,8 +14,8 @@ fun convertBitmapToBase64(bitmap: Bitmap): String {
     val height = bitmap.height
     val resized = Bitmap.createScaledBitmap(
         bitmap,
-        width.toInt(),
-        height.toInt(),
+        width,
+        height,
         false
     )
     resized.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)

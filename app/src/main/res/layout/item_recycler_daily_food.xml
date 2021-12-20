@@ -33,7 +33,9 @@
                     android:src="@drawable/ic_outline_home_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:pos="@{item.food.pos}"
+                    app:uri="@{item.uri}" />
 
                 <TextView
                     android:id="@+id/tv_food_name"

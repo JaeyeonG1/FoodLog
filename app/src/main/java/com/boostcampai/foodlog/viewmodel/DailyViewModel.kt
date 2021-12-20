@@ -19,9 +19,9 @@ class DailyViewModel @Inject constructor(
     fun initDailyFoods(dietWithFoods: List<DietWithFoods>) {
         date = getDate(dietWithFoods[0].diet.dateTime)
 
+        dailyFoods = mutableListOf()
         dietWithFoods.forEach {
             dailyFoods.addAll(it.foods.map { food ->
-                Log.d("food item", food.toString())
                 DailyFoodModel(it.diet.uri, getTime(it.diet.dateTime), food)
             })
         }
