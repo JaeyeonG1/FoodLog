@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.util.Log
+import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -32,7 +34,8 @@ fun loadImage(imageView: ImageView, uri: String?, pos: Position) {
     uri ?: return
     var bitmap: Bitmap? = null
     CoroutineScope(Dispatchers.IO).launch {
-        bitmap = Glide.with(imageView.context)
+        if (URLUtil.isValidUrl(uri))
+            bitmap = Glide.with(imageView.context)
             .asBitmap()
             .load(uri)
             .submit()
