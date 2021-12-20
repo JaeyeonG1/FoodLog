@@ -22,11 +22,14 @@ class ConfirmFragment : Fragment() {
     private val viewModel: ConfirmViewModel by viewModels()
     private val navArgs: ConfirmFragmentArgs by navArgs()
 
+    private lateinit var loadingDialog: LoadingDialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_confirm, container, false)
+        loadingDialog = LoadingDialog(requireContext())
         return binding.root
     }
 
@@ -42,12 +45,12 @@ class ConfirmFragment : Fragment() {
         }
 
         binding.btnTest.setOnClickListener {
-            viewModel.inferenceFromBitmap { diet ->
+            viewModel.inferenceFromBitmap({ onLoadingStart() }, { diet ->
                 val action = ConfirmFragmentDirections.actionConfirmFragmentToResultFragment(
                     navArgs.bitmap, diet
                 )
                 findNavController().navigate(action)
-            }
+            }, { onLoadingFinished() })
         }
 
         binding.btnReset.setOnClickListener {
@@ -55,4 +58,15 @@ class ConfirmFragment : Fragment() {
         }
     }
 
+    private fun onLoadingStart() {
+        loadingDialog.show()
+        binding.btnTest.isEnabled = false
+        binding.btnReset.isEnabled = false
+    }
+
+    private fun onLoadingFinished() {
+        loadingDialog.dismiss()
+        binding.btnTest.isEnabled = true
+        binding.btnReset.isEnabled = true
+    }
 }

@@ -21,7 +21,7 @@ interface ImageInferenceService {
     ): Call<String>
 
     companion object {
-        private const val apiUrl = "http://192.168.0.61:8000/"
+        private const val apiUrl = "http://121.182.238.97:8000/"
 
         fun create(): ImageInferenceService {
             return Retrofit

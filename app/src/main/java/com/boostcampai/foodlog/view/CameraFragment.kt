@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -28,7 +27,6 @@ import com.boostcampai.foodlog.R
 import com.boostcampai.foodlog.databinding.FragmentCameraBinding
 import com.boostcampai.foodlog.viewmodel.CameraViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 
 @AndroidEntryPoint
 class CameraFragment : Fragment() {
@@ -40,12 +38,15 @@ class CameraFragment : Fragment() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    private lateinit var loadingDialog: LoadingDialog
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false)
+        loadingDialog = LoadingDialog(requireContext())
         return binding.root
     }
 
@@ -60,6 +61,7 @@ class CameraFragment : Fragment() {
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                loadingDialog.show()
                 if (it.resultCode == RESULT_OK && it.data != null) {
                     Log.d("result", "RESULT_OK")
                     var currentImageUri = it.data?.data
@@ -71,7 +73,10 @@ class CameraFragment : Fragment() {
                                     currentImageUri
                                 ).copy(Bitmap.Config.ARGB_8888, true)
                                 // 여기서 bitmap 초기화
-                                val action = CameraFragmentDirections.actionCameraFragmentToConfirmFragment(bitmap)
+                                val action =
+                                    CameraFragmentDirections.actionCameraFragmentToConfirmFragment(
+                                        bitmap
+                                    )
                                 findNavController().navigate(action)
 
                             } else {
@@ -79,8 +84,12 @@ class CameraFragment : Fragment() {
                                     requireActivity().contentResolver,
                                     currentImageUri
                                 )
-                                val bitmap = ImageDecoder.decodeBitmap(source).copy(Bitmap.Config.ARGB_8888, true)
-                                val action = CameraFragmentDirections.actionCameraFragmentToConfirmFragment(bitmap)
+                                val bitmap = ImageDecoder.decodeBitmap(source)
+                                    .copy(Bitmap.Config.ARGB_8888, true)
+                                val action =
+                                    CameraFragmentDirections.actionCameraFragmentToConfirmFragment(
+                                        bitmap
+                                    )
                                 findNavController().navigate(action)
                             }
                         }
@@ -93,6 +102,7 @@ class CameraFragment : Fragment() {
                 } else {
                     Log.d("wrong", "")
                 }
+                loadingDialog.dismiss()
             }
         binding.btnGallery.setOnClickListener {
             selectImageFromGallery()
@@ -123,8 +133,22 @@ class CameraFragment : Fragment() {
 
     private fun createCameraManager(onCapture: (Bitmap) -> Unit) {
         cameraManager = CameraManager(requireActivity(), binding.pvCamera) {
+            onStartWork()
             onCapture(it)
+            onFinishWork()
         }
+    }
+
+    private fun onStartWork() {
+        loadingDialog.show()
+        binding.btnPicture.isEnabled = false
+        binding.btnGallery.isEnabled = false
+    }
+
+    private fun onFinishWork() {
+        binding.btnPicture.isEnabled = true
+        binding.btnGallery.isEnabled = false
+        loadingDialog.dismiss()
     }
 
     override fun onRequestPermissionsResult(

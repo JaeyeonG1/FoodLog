@@ -37,12 +37,12 @@ class ResultViewModel @Inject constructor(
         )
     }
 
-    fun sendFeedback(base64: String, list: List<Boolean>, onResult: (String) -> (Unit)) {
+    fun sendFeedback(base64: String, list: List<Boolean>, onResultReceived: (String) -> (Unit)) {
         Log.d("SendFeedback", list.toString())
         viewModelScope.launch {
             cameraRepository.sendFeedback(base64, originResult.date, originResult.foods, list)
-                .onSuccess { onResult(it) }
-                .onFailure { onResult("전송에 실패했습니다.") }
+                .onSuccess { onResultReceived(it) }
+                .onFailure { onResultReceived("전송에 실패했습니다.") }
         }
     }
 
@@ -57,11 +57,10 @@ class ResultViewModel @Inject constructor(
     fun saveResult(uri: String) {
         if (inferenceResult.value == null)
             return
-
-        val dateTime = inferenceResult.value!!.run { "$date $time" }
-        val foods = inferenceResult.value!!.foods
-
         CoroutineScope(Dispatchers.IO).launch {
+
+            val dateTime = inferenceResult.value!!.run { "$date $time" }
+            val foods = inferenceResult.value!!.foods
             with(Diet(uri = uri, dateTime = dateTime)) {
                 val id = cameraRepository.dietDao.insert(this)
                 with(foods.map { food -> food.apply { imgId = id[0] } }) {

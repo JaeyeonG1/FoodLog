@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.boostcampai.foodlog.R
@@ -29,6 +30,8 @@ import com.boostcampai.foodlog.databinding.FragmentResultBinding
 import com.boostcampai.foodlog.drawBoundingBoxes
 import com.boostcampai.foodlog.viewmodel.ResultViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -42,6 +45,8 @@ class ResultFragment : Fragment() {
     private val navArgs: ResultFragmentArgs by navArgs()
     private lateinit var adapter: ResultMultiViewRecyclerAdapter
 
+    private lateinit var loadingDialog: LoadingDialog
+
     private val storageRequestCode = 200
 
     override fun onCreateView(
@@ -50,6 +55,7 @@ class ResultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_result, container, false)
+        loadingDialog = LoadingDialog(requireContext())
         return binding.root
     }
 
@@ -69,25 +75,11 @@ class ResultFragment : Fragment() {
             inflateMenu(R.menu.menu_toolbar_result)
             setOnMenuItemClickListener {
                 if (it.itemId == R.id.action_save) {
-                    saveImage(navArgs.bitmap).let { uri ->
-                        viewModel.saveResult(uri.toString())
-
-                        val action = ResultFragmentDirections.actionResultFragmentToHomeFragment()
-                        findNavController().navigate(action)
-                        return@setOnMenuItemClickListener true
-                    }
+                    runSaveAction()
+                    return@setOnMenuItemClickListener true
                 } else if (it.itemId == R.id.action_feedback) {
-                    viewModel.inferenceResult.value?.foods?.let { foods ->
-                        FeedbackDialogFragment(navArgs.bitmap, foods) { feedback ->
-                            viewModel.sendFeedback(
-                                convertBitmapToBase64(navArgs.bitmap),
-                                feedback
-                            ) { resultMessage ->
-                                Toast.makeText(requireContext(), resultMessage, Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }.show(requireActivity().supportFragmentManager, "피드백 보내기")
-                    }
+                    runFeedbackAction()
+                    return@setOnMenuItemClickListener true
                 }
                 return@setOnMenuItemClickListener false
             }
@@ -115,6 +107,35 @@ class ResultFragment : Fragment() {
         viewModel.goal.observe(viewLifecycleOwner, { setRecyclerAdapter() })
         viewModel.unit.observe(viewLifecycleOwner, { setRecyclerAdapter() })
         viewModel.inferenceResult.observe(viewLifecycleOwner, { setRecyclerAdapter() })
+    }
+
+    private fun runSaveAction() {
+        loadingDialog.show()
+        lifecycleScope.launch(Dispatchers.IO) {
+            saveImage(navArgs.bitmap).let { uri ->
+                viewModel.saveResult(uri.toString())
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val action =
+                        ResultFragmentDirections.actionResultFragmentToHomeFragment()
+                    findNavController().navigate(action)
+                    loadingDialog.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun runFeedbackAction() {
+        viewModel.inferenceResult.value?.foods?.let { foods ->
+            FeedbackDialogFragment(navArgs.bitmap, foods) { feedback ->
+                viewModel.sendFeedback(
+                    convertBitmapToBase64(navArgs.bitmap),
+                    feedback
+                ) { resultMessage ->
+                    Toast.makeText(requireContext(), resultMessage, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }.show(requireActivity().supportFragmentManager, "피드백 보내기")
+        }
     }
 
     private fun saveImage(bitmap: Bitmap): Uri? {

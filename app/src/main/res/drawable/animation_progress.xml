@@ -2,6 +2,6 @@
 <animated-rotate
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:drawable="@drawable/ic_baseline_settings_24"
-    android:pivotX="25%"
-    android:pivotY="25%">
+    android:pivotX="50%"
+    android:pivotY="50%">
 </animated-rotate>

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.boostcampai.foodlog.model.Diet
 import com.boostcampai.foodlog.model.Food
 import com.boostcampai.foodlog.model.Position
 import com.boostcampai.foodlog.network.DietResponse
@@ -16,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
@@ -29,18 +29,25 @@ class ConfirmViewModel @Inject constructor(
 
     var imgBase64: String = ""
 
-    fun inferenceFromBitmap(onSuccess: (DietResponse) -> (Unit)) {
+    fun inferenceFromBitmap(
+        onStart: () -> (Unit),
+        onSuccess: (DietResponse) -> (Unit),
+        onFinish: () -> (Unit)
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Main).launch { onStart() }
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
             cameraRepository.getInferenceResult(imgBase64, LocalDateTime.now().format(formatter))
                 .onSuccess {
                     viewModelScope.launch {
                         _inferenceResult.value = it
                         Log.d("Result", it.toString())
+                        CoroutineScope(Dispatchers.Main).launch { onFinish() }
                         onSuccess(it.diet)
                     }
                 }.onFailure {
                     Log.d("getImageInferenceResult", "Failure")
+                    CoroutineScope(Dispatchers.Main).launch { onFinish() }
                 }
         }
     }
