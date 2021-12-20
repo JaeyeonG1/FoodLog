@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/camera"
+    app:startDestination="@id/cameraFragment">
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.boostcampai.foodlog.view.CameraFragment"
+        android:label="">
+        <action
+            android:id="@+id/action_cameraFragment_to_confirmFragment"
+            app:destination="@id/confirmFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirmFragment"
+        android:name="com.boostcampai.foodlog.view.ConfirmFragment"
+        android:label="">
+        <argument
+            android:name="bitmap"
+            app:argType="android.graphics.Bitmap" />
+        <action
+            android:id="@+id/action_confirmFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.boostcampai.foodlog.view.ResultFragment"
+        android:label="">
+
+        <argument
+            android:name="bitmap"
+            app:argType="android.graphics.Bitmap" />
+
+        <argument
+            android:name="inferenceResult"
+            app:argType="com.boostcampai.foodlog.network.DietResponse" />
+    </fragment>
+
+</navigation>

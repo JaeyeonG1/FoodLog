@@ -115,10 +115,8 @@ class ResultFragment : Fragment() {
             saveImage(navArgs.bitmap).let { uri ->
                 viewModel.saveResult(uri.toString())
                 lifecycleScope.launch(Dispatchers.Main) {
-                    val action =
-                        ResultFragmentDirections.actionResultFragmentToHomeFragment()
-                    findNavController().navigate(action)
                     loadingDialog.dismiss()
+                    findNavController().popBackStack(R.id.homeFragment, false)
                 }
             }
         }

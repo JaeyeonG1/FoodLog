@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/detail"
+    app:startDestination="@id/detailFragment">
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.boostcampai.foodlog.view.DetailFragment"
+        android:label="">
+        <action
+            android:id="@+id/action_detailFragment_to_dailyFragment"
+            app:destination="@id/dailyFragment"
+            app:enterAnim="@anim/bottom_up"
+            app:exitAnim="@anim/up_bottom"
+            app:popEnterAnim="@anim/bottom_up"
+            app:popExitAnim="@anim/up_bottom" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dailyFragment"
+        android:name="com.boostcampai.foodlog.view.DailyFragment"
+        android:label="">
+
+        <argument
+            android:name="foods"
+            app:argType="com.boostcampai.foodlog.data.dao.DietWithFoods[]" />
+    </fragment>
+</navigation>
