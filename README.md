@@ -29,5 +29,9 @@
 ## 어플리케이션
 <img width="2051" alt="foodlog" src="https://user-images.githubusercontent.com/51802825/147404282-fec354fa-6caa-49a0-b189-9d194f7d9a2b.png">
 
+## 데모 영상
+
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/51802825/147072941-623a25d6-7214-43cf-9715-011c69b7eef1.gif)
+
 ## Reference (Model, Backend)
 https://github.com/boostcampaitech2/final-project-level3-cv-09
