@@ -5,7 +5,7 @@
 |[최재영](https://github.com/JaeyeonG1) |  [최현진](https://github.com/hyeonjini)|
 | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: | 
 |<img src="https://avatars.githubusercontent.com/u/48234603?v=4" height="150">|<img src="https://user-images.githubusercontent.com/63527907/147105383-8314f309-d926-44e4-9833-1f16e700f4f5.jpg" height="150">| 
-|Naver Boostcamp 웹 모바일 |Naver Boostcamp AI Tech 2기|
+|Naver Boostcamp 웹 모바일 6기 |Naver Boostcamp AI Tech 2기|
 
 
 ## FoodLog 소개
